@@ -43,3 +43,10 @@ generateDefaultVertLoop dim n =
 
 validLines :: IndexedIntList -> [Int] -> IndexedIntList
 validLines vert lines = filter (\e->fst e `elem` lines) vert
+
+deleteAtList :: [Int] -> [(Int,a)] -> [(Int,a)]
+deleteAtList [x] vert = deleteAt x vert
+deleteAtList (x:xs) vert = deleteAt x (deleteAtList xs vert)
+
+deleteCollums :: [Int] -> IndexedIntList -> [[(Int,Int)]]
+deleteCollums col = map (deleteAtList col) . unindexed
