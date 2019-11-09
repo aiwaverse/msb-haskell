@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 6c31fb1696888998325e44961e96542db6dcbeb643d0e1fc3b7b2c6d0c431e79
+-- hash: 0b9d4a75c84aebf3b9ea49e1aadeff1a1acdf2ff1ffae159a91228778eb1a60e
 
 name:           msb-haskell
 version:        0.1.0.0
@@ -27,6 +27,7 @@ source-repository head
 
 library
   exposed-modules:
+      Graph
       Lib
   other-modules:
       Paths_msb_haskell
@@ -34,18 +35,19 @@ library
       src
   build-depends:
       base >=4.7 && <5
+    , ilist
   default-language: Haskell2010
 
 executable msb-haskell-exe
   main-is: Main.hs
   other-modules:
-      Graph
       Paths_msb_haskell
   hs-source-dirs:
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , ilist
     , msb-haskell
   default-language: Haskell2010
 
@@ -59,5 +61,6 @@ test-suite msb-haskell-test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , ilist
     , msb-haskell
   default-language: Haskell2010
