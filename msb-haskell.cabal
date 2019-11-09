@@ -1,0 +1,63 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.2.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 6c31fb1696888998325e44961e96542db6dcbeb643d0e1fc3b7b2c6d0c431e79
+
+name:           msb-haskell
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/aiwaverse/msb-haskell#readme>
+homepage:       https://github.com/aiwaverse/msb-haskell#readme
+bug-reports:    https://github.com/aiwaverse/msb-haskell/issues
+author:         aiwa
+maintainer:     aiwavision@protonmail.com
+copyright:      2019 aiwa
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/aiwaverse/msb-haskell
+
+library
+  exposed-modules:
+      Lib
+  other-modules:
+      Paths_msb_haskell
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+  default-language: Haskell2010
+
+executable msb-haskell-exe
+  main-is: Main.hs
+  other-modules:
+      Graph
+      Paths_msb_haskell
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , msb-haskell
+  default-language: Haskell2010
+
+test-suite msb-haskell-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_msb_haskell
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , msb-haskell
+  default-language: Haskell2010
