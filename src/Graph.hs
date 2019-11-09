@@ -18,16 +18,14 @@ aGraph = (defaultGraph 7) {vertices = indexed [indexed [-1,4,-1,9,-1,-1,-1],
 data Graph = Graph { vertices   :: IndexedIntList
                    , dimensions :: Int
                    , linesToSearch :: [Int]
-                   , linesToAvoid :: [Int]
                    } deriving (Show)
 
 
-    
+
 defaultGraph :: Int -> Graph
 defaultGraph n = Graph { vertices      = generateDefaultVert n
                        , dimensions    = n
                        , linesToSearch = [0]
-                       , linesToAvoid  = []
                        }
 
 -- simply de-indexes an indexed list
@@ -53,6 +51,24 @@ deleteAtList [x] vert = deleteAt x vert
 deleteAtList (x:xs) vert = deleteAt x (deleteAtList xs vert)
 
 --given a list of indexes and an indexed int list, will remove the internal indexes 
-deleteCollums :: [Int] -> IndexedIntList -> [[(Int,Int)]]
-deleteCollums col = map (deleteAtList col) . unindexed
+deleteCollums :: [Int] -> IndexedIntList -> IndexedIntList
+deleteCollums col = indexed . map (deleteAtList col) . unindexed
 
+--given the indexes vertices list, return a list of pairs with all the smallest 
+smallestWeights :: IndexedIntList -> [Int] -> [(Int,Int)]
+smallestWeights vert valid = map (minimumBy (\x y -> compare (snd x) (snd y))) filteredNotNull
+            where unfiltered = map snd (validLines vert valid)
+                  filtered = map (filter ((>=0) . snd)) unfiltered
+                  filteredNotNull = filter (not . null) filtered
+
+smallestWeightOfList :: [(Int,Int)] -> (Int,Int)
+smallestWeightOfList = minimumBy (\ x y -> compare (snd x) (snd y))
+
+generateMSA _ 0 = []
+generateMSA g dim = weight : generateMSA newGraph (dim-1)
+           where indexWeight = smallestWeightOfList $ smallestWeights (deleteCollums (linesToSearch g) (vertices g)) (linesToSearch g)
+                 weight = snd indexWeight
+                 indexes = fst indexWeight
+                 linesToAvoid = sort $ indexes : linesToSearch g
+                 newVertices = deleteCollums [indexes] (vertices g)
+                 newGraph = g{vertices=newVertices,linesToSearch=linesToAvoid}
