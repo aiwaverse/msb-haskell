@@ -12,7 +12,7 @@ The executable is some folders deep in the .stack-work folder, the build command
 ## Usage
 The program expects an integer followed by a new line, which determines the graph number of vertices, this is basically entering the [adjacency matrix](https://en.wikipedia.org/wiki/Adjacency_matrix) of a graph.
 Then, enter n numbers separated by space, n times, here, -1 represents no connection between the vertices, while any integer >=0 means the weight of the connection, take the following graph as an example:
-!(Example graph)[https://i.imgur.com/oZuDpZr.png]
+!(Example graph)[https://raw.githubusercontent.com/aiwaverse/msb-haskell/master/image/grafo.png]
 It is entered as follow
 ```bash
 ./msb-haskell-exe
