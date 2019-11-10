@@ -1,9 +1,9 @@
 module Graph where
 
-import           Data.List
-import           Data.List.Index
-import           Data.Maybe
 import           Data.Char
+import           Data.List
+import           Data.List.Index hiding (deleteAt)
+import           Data.Maybe
 
 type IndexedIntList = [(Int,[(Int,Int)])]
 
@@ -15,8 +15,8 @@ aGraph = (defaultGraph 7) {vertices = indexed [indexed [-1,4,-1,9,-1,-1,-1],
                                        indexed [-1,-1,3,-1,5,-1,-1],
                                        indexed [-1,-1,-1,1,2,-1,-1]]}
 
-data Graph = Graph { vertices   :: IndexedIntList
-                   , dimensions :: Int
+data Graph = Graph { vertices      :: IndexedIntList
+                   , dimensions    :: Int
                    , linesToSearch :: [Int]
                    } deriving (Show)
 
@@ -45,16 +45,22 @@ generateDefaultVertLoop dim n =
 validLines :: IndexedIntList -> [Int] -> IndexedIntList
 validLines vert lines = filter (\e->fst e `elem` lines) vert
 
+
+deleteAt :: Int -> [(Int,a)] -> [(Int,a)]
+deleteAt _ [] = []
+deleteAt index list@(x:xs) | index == fst x = deleteAt index xs
+                           | otherwise = x : deleteAt index xs
+
 --given a list of indexs to lit and an indexes list, return the same list without those indexes
 deleteAtList :: [Int] -> [(Int,a)] -> [(Int,a)]
-deleteAtList [x] vert = deleteAt x vert
+deleteAtList [x] vert    = deleteAt x vert
 deleteAtList (x:xs) vert = deleteAt x (deleteAtList xs vert)
 
---given a list of indexes and an indexed int list, will remove the internal indexes 
+--given a list of indexes and an indexed int list, will remove the internal indexes
 deleteCollums :: [Int] -> IndexedIntList -> IndexedIntList
 deleteCollums col = indexed . map (deleteAtList col) . unindexed
 
---given the indexes vertices list, return a list of pairs with all the smallest 
+--given the indexes vertices list, return a list of pairs with all the smallest
 smallestWeights :: IndexedIntList -> [Int] -> [(Int,Int)]
 smallestWeights vert valid = map (minimumBy (\x y -> compare (snd x) (snd y))) filteredNotNull
             where unfiltered = map snd (validLines vert valid)
@@ -72,3 +78,9 @@ generateMSA g dim = weight : generateMSA newGraph (dim-1)
                  linesToAvoid = sort $ indexes : linesToSearch g
                  newVertices = deleteCollums [indexes] (vertices g)
                  newGraph = g{vertices=newVertices,linesToSearch=linesToAvoid}
+
+generateMSB g = sumOfWeights - biggestWeight
+         where path = generateMSA newGraph (dimensions g - 1)
+               sumOfWeights = sum path
+               biggestWeight = if sumOfWeights /= 0 then maximum path else 0
+               newGraph = g{vertices=deleteCollums [0] (vertices g)}
