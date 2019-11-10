@@ -38,3 +38,6 @@ cabal.project.local~
 .history
 
 # End of https://www.gitignore.io/api/haskell,visualstudiocode
+
+# my test txt, for redirected input
+test.txt

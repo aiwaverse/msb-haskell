@@ -70,6 +70,7 @@ smallestWeights vert valid = map (minimumBy (\x y -> compare (snd x) (snd y))) f
 smallestWeightOfList :: [(Int,Int)] -> (Int,Int)
 smallestWeightOfList = minimumBy (\ x y -> compare (snd x) (snd y))
 
+generateMSA :: Graph -> Int -> [Int]
 generateMSA _ 0 = []
 generateMSA g dim = weight : generateMSA newGraph (dim-1)
            where indexWeight = smallestWeightOfList $ smallestWeights (deleteCollums (linesToSearch g) (vertices g)) (linesToSearch g)
@@ -79,6 +80,7 @@ generateMSA g dim = weight : generateMSA newGraph (dim-1)
                  newVertices = deleteCollums [indexes] (vertices g)
                  newGraph = g{vertices=newVertices,linesToSearch=linesToAvoid}
 
+generateMSB :: Graph -> Int
 generateMSB g = sumOfWeights - biggestWeight
          where path = generateMSA newGraph (dimensions g - 1)
                sumOfWeights = sum path
