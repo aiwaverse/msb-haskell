@@ -41,3 +41,5 @@ cabal.project.local~
 
 # my test txt, for redirected input
 test.txt
+msb-haskell-exe 
+.directory
