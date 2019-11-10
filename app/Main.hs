@@ -1,14 +1,14 @@
+{-# LANGUAGE TypeApplications #-}
 module Main where
 import           Data.List.Index hiding (deleteAt)
 import           Graph
-
 main :: IO ()
 main = do
     dim <- getLine
     let dimN = read dim :: Int
     inputs <- getMultipleLines dimN
     let vert = map makeVerticeList inputs
-    let listOfVertices = map (read::String->[Int]) vert
+    let listOfVertices = map (read @[Int]) vert
     let indexedVertices = indexed . map indexed $ listOfVertices
     let myGraph = (defaultGraph dimN){vertices=indexedVertices}
     print $ generateMSB myGraph
